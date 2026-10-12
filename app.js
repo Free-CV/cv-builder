@@ -286,39 +286,41 @@ function exportToWord() {
     const align = isArabic ? 'right' : 'left';
     const cvCopy = document.getElementById('cvPreview').cloneNode(true);
 
-    // Inline the important formatting because Word does not reliably apply page CSS from HTML files.
-    cvCopy.setAttribute('style', `display:block;width:100%;min-height:0;margin:0;padding:0;color:#000;font-family:Arial,sans-serif;direction:${isArabic ? 'rtl' : 'ltr'};text-align:${align};vertical-align:top;`);
+    // Match the A4 preview: fixed page padding, ATS typography, and black rules beneath section titles.
+    cvCopy.setAttribute('style', `display:block;width:100%;min-height:0;margin:0;padding:0;color:#000;font-family:Cairo,Arial,sans-serif;direction:${isArabic ? 'rtl' : 'ltr'};text-align:${align};vertical-align:top;`);
     cvCopy.querySelectorAll('.ats-section h2').forEach(heading => {
-        heading.setAttribute('style', `display:block;text-align:${align};font-family:Arial,sans-serif;font-size:11pt;font-weight:bold;margin:0 0 8pt;padding:0 0 4pt;border-bottom:1.25pt solid #222;mso-border-bottom-alt:solid #222 1.25pt;`);
-    });
-    cvCopy.querySelectorAll('.ats-contact > div, .cv-entry > div, .ats-section > p, .ats-formatted-text > div, .ats-section li').forEach(row => {
-        row.style.cssText += `;display:block;text-align:${align};padding:0 0 5pt;margin:0 0 5pt;border-bottom:0.6pt solid #d9dee7;mso-border-bottom-alt:solid #d9dee7 .6pt;`;
+        heading.setAttribute('style', `display:block;text-align:${align};font-family:Cairo,Arial,sans-serif;font-size:10.5pt;font-weight:bold;text-transform:uppercase;margin:0 0 6pt;padding:0 0 2pt;border-bottom:1px solid #000;mso-border-bottom-alt:solid #000 .75pt;`);
     });
     cvCopy.querySelectorAll('.ats-section').forEach(section => {
         section.style.cssText += 'display:block;margin:0 0 14pt;page-break-inside:auto;';
     });
     cvCopy.querySelectorAll('.cv-entry').forEach(entry => {
-        entry.style.cssText += 'display:block;margin:0 0 9pt;page-break-inside:avoid;';
+        entry.style.cssText += 'display:block;margin:0 0 10pt;page-break-inside:avoid;';
     });
 
     const wordStyles = `
-        @page Section1 { size:595.3pt 841.9pt; margin:45pt 45pt 45pt 45pt; mso-page-orientation:portrait; }
+        @page Section1 { size:595.3pt 841.9pt; margin:0; mso-page-orientation:portrait; }
         div.Section1 { page:Section1; }
         html, body { margin:0 !important; padding:0 !important; width:100%; height:auto; vertical-align:top; }
-        body { font-family:Arial,sans-serif; font-size:10pt; color:#000; direction:${isArabic ? 'rtl' : 'ltr'}; text-align:${align}; mso-pagination:widow-orphan; }
+        body { font-family:Cairo,Arial,sans-serif; font-size:9pt; color:#000; direction:${isArabic ? 'rtl' : 'ltr'}; text-align:${align}; mso-pagination:widow-orphan; }
         table.word-page { width:100%; border-collapse:collapse; table-layout:fixed; margin:0; mso-table-lspace:0pt; mso-table-rspace:0pt; }
-        table.word-page td { padding:0; vertical-align:top; text-align:${align}; }
-        #cvPreview { width:100%; min-height:0; margin:0; padding:0; vertical-align:top; }
-        .ats-header { margin:0 0 16pt; }
-        .ats-header h1 { margin:0 0 7pt; font-family:Arial,sans-serif; font-size:21pt; font-weight:bold; text-align:${align}; }
-        .ats-contact, .ats-contact div { font-family:Arial,sans-serif; font-size:9.5pt; text-align:${align}; }
+        table.word-page td { padding:51.02pt; vertical-align:top; text-align:${align}; }
+        #cvPreview { display:block; width:100%; min-height:0; margin:0; padding:0; vertical-align:top; }
+        .ats-header { margin:0 0 18px; }
+        .ats-header h1 { margin:0 0 7px; color:#000; font-family:Cairo,Arial,sans-serif; font-size:22pt; font-weight:bold; text-align:${align}; }
+        .ats-contact, .ats-contact div { color:#333; font-family:Cairo,Arial,sans-serif; font-size:9pt; text-align:${align}; }
         .ats-single-column { display:block; }
-        .ats-section { display:block; margin:0 0 14pt; }
-        .ats-section h2 { border-bottom:1.25pt solid #222; mso-border-bottom-alt:solid #222 1.25pt; }
-        .cv-entry { display:block; page-break-inside:avoid; margin:0 0 9pt; }
-        p, div, li { font-family:Arial,sans-serif; }
+        .ats-section { display:block; margin:0 0 14px; }
+        .ats-section h2 { color:#000; border-bottom:1px solid #000; mso-border-bottom-alt:solid #000 .75pt; }
+        .ats-section p, .ats-formatted-text, .ats-section ul { color:#111; font-size:9pt; line-height:1.5; }
+        .cv-entry { display:block; page-break-inside:avoid; margin:0 0 10px; }
+        .bold-text { display:block; font-size:9.5pt; font-weight:bold; margin-bottom:2px; }
+        .subbold-text { display:block; font-size:9pt; font-weight:bold; margin:2px 0 4px; }
+        .date-text { display:block; font-size:8.5pt; margin:2px 0; }
+        ul { padding-inline-start:18px; }
+        .text-bullet { margin-inline-start:14px; }
     `;
-    const wrapper = `<div class="Section1"><table class="word-page" width="100%" align="${align}" border="0" cellpadding="0" cellspacing="0"><tr><td valign="top" align="${align}">${cvCopy.outerHTML}</td></tr></table></div>`;
+    const wrapper = `<div class="Section1"><table class="word-page" width="100%" align="${align}" border="0" cellpadding="0" cellspacing="0"><tr><td valign="top" align="${align}" style="padding:51.02pt;vertical-align:top;">${cvCopy.outerHTML}</td></tr></table></div>`;
     const html = `<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" lang="${currentLang}" dir="${isArabic ? 'rtl' : 'ltr'}"><head><meta charset="utf-8"><meta name="ProgId" content="Word.Document"><title>${t.resumeTitle}</title><style>${wordStyles}</style></head><body>${wrapper}</body></html>`;
     const blob = new Blob(['\ufeff', html], { type: 'application/msword;charset=utf-8' });
     const url = URL.createObjectURL(blob);
