@@ -283,7 +283,43 @@ function exportToWord() {
     const isArabic = currentLang === 'ar';
     const t = translations[currentLang];
     const filename = isArabic ? 'السيرة-الذاتية.doc' : `${t.resumeTitle.replace(/[^a-z0-9 -]/gi, '').replace(/\s+/g, '-') || 'Resume'}.doc`;
-    const html = `<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" lang="${currentLang}" dir="${isArabic ? 'rtl' : 'ltr'}"><head><meta charset="utf-8"><title>${t.resumeTitle}</title><style>${getExportStyles()} body{margin:16mm;} </style></head><body>${document.getElementById('cvPreview').outerHTML}</body></html>`;
+    const align = isArabic ? 'right' : 'left';
+    const cvCopy = document.getElementById('cvPreview').cloneNode(true);
+
+    // Inline the important formatting because Word does not reliably apply page CSS from HTML files.
+    cvCopy.setAttribute('style', `display:block;width:100%;min-height:0;margin:0;padding:0;color:#000;font-family:Arial,sans-serif;direction:${isArabic ? 'rtl' : 'ltr'};text-align:${align};vertical-align:top;`);
+    cvCopy.querySelectorAll('.ats-section h2').forEach(heading => {
+        heading.setAttribute('style', `display:block;text-align:${align};font-family:Arial,sans-serif;font-size:11pt;font-weight:bold;margin:0 0 8pt;padding:0 0 4pt;border-bottom:1.25pt solid #222;mso-border-bottom-alt:solid #222 1.25pt;`);
+    });
+    cvCopy.querySelectorAll('.ats-contact > div, .cv-entry > div, .ats-section > p, .ats-formatted-text > div, .ats-section li').forEach(row => {
+        row.style.cssText += `;display:block;text-align:${align};padding:0 0 5pt;margin:0 0 5pt;border-bottom:0.6pt solid #d9dee7;mso-border-bottom-alt:solid #d9dee7 .6pt;`;
+    });
+    cvCopy.querySelectorAll('.ats-section').forEach(section => {
+        section.style.cssText += 'display:block;margin:0 0 14pt;page-break-inside:auto;';
+    });
+    cvCopy.querySelectorAll('.cv-entry').forEach(entry => {
+        entry.style.cssText += 'display:block;margin:0 0 9pt;page-break-inside:avoid;';
+    });
+
+    const wordStyles = `
+        @page Section1 { size:595.3pt 841.9pt; margin:45pt 45pt 45pt 45pt; mso-page-orientation:portrait; }
+        div.Section1 { page:Section1; }
+        html, body { margin:0 !important; padding:0 !important; width:100%; height:auto; vertical-align:top; }
+        body { font-family:Arial,sans-serif; font-size:10pt; color:#000; direction:${isArabic ? 'rtl' : 'ltr'}; text-align:${align}; mso-pagination:widow-orphan; }
+        table.word-page { width:100%; border-collapse:collapse; table-layout:fixed; margin:0; mso-table-lspace:0pt; mso-table-rspace:0pt; }
+        table.word-page td { padding:0; vertical-align:top; text-align:${align}; }
+        #cvPreview { width:100%; min-height:0; margin:0; padding:0; vertical-align:top; }
+        .ats-header { margin:0 0 16pt; }
+        .ats-header h1 { margin:0 0 7pt; font-family:Arial,sans-serif; font-size:21pt; font-weight:bold; text-align:${align}; }
+        .ats-contact, .ats-contact div { font-family:Arial,sans-serif; font-size:9.5pt; text-align:${align}; }
+        .ats-single-column { display:block; }
+        .ats-section { display:block; margin:0 0 14pt; }
+        .ats-section h2 { border-bottom:1.25pt solid #222; mso-border-bottom-alt:solid #222 1.25pt; }
+        .cv-entry { display:block; page-break-inside:avoid; margin:0 0 9pt; }
+        p, div, li { font-family:Arial,sans-serif; }
+    `;
+    const wrapper = `<div class="Section1"><table class="word-page" width="100%" align="${align}" border="0" cellpadding="0" cellspacing="0"><tr><td valign="top" align="${align}">${cvCopy.outerHTML}</td></tr></table></div>`;
+    const html = `<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" lang="${currentLang}" dir="${isArabic ? 'rtl' : 'ltr'}"><head><meta charset="utf-8"><meta name="ProgId" content="Word.Document"><title>${t.resumeTitle}</title><style>${wordStyles}</style></head><body>${wrapper}</body></html>`;
     const blob = new Blob(['\ufeff', html], { type: 'application/msword;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
