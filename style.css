@@ -1,181 +1,170 @@
-/* إعدادات عامة */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Cairo', sans-serif;
+    font-family: 'Cairo', Arial, sans-serif;
 }
 
 body {
-    background-color: #f4f7f6;
+    background-color: #2b2b2b;
     color: #333;
-    line-height: 1.6;
 }
 
 .main-header {
     text-align: center;
-    background-color: #2c3e50;
+    background-color: #1a1a1a;
     color: white;
-    padding: 20px;
+    padding: 15px;
 }
 
-.main-header p {
-    color: #bdc3c7;
-    font-size: 14px;
-    margin-top: 5px;
-}
-
-/* تخطيط الصفحة (قسمين جنباً إلى جنب) */
 .container {
     display: flex;
-    flex-wrap: wrap;
     gap: 20px;
     padding: 20px;
-    max-width: 1400px;
+    max-width: 1500px;
     margin: 0 auto;
 }
 
-/* نموذج الإدخال */
 .form-section {
     flex: 1;
-    min-width: 320px;
     background: white;
-    padding: 25px;
+    padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .form-section h2 {
-    margin-bottom: 20px;
-    color: #2c3e50;
-    font-size: 20px;
-    border-bottom: 2px solid #ecf0f1;
-    padding-bottom: 10px;
+    font-size: 16px;
+    margin: 15px 0 8px 0;
+    color: #111;
+    border-bottom: 1px solid #ccc;
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 5px;
-    font-weight: 600;
-    font-size: 14px;
-    color: #34495e;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 3px;
 }
 
-.form-group input, 
-.form-group textarea {
+.form-group input, .form-group textarea {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #dcdde1;
-    border-radius: 6px;
-    font-size: 14px;
-    transition: border 0.3s;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 13px;
 }
 
-.form-group input:focus, 
-.form-group textarea:focus {
-    border-color: #3498db;
-    outline: none;
-}
-
-/* قسم المعاينة */
 .preview-section {
-    flex: 1;
-    min-width: 320px;
+    flex: 1.2;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 .actions-bar {
-    width: 100%;
-    max-width: 210mm;
-    margin-bottom: 15px;
+    width: 210mm;
+    margin-bottom: 10px;
     text-align: left;
 }
 
 #downloadBtn {
-    background-color: #27ae60;
+    background: #008cba;
     color: white;
     border: none;
     padding: 10px 20px;
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 15px;
     font-weight: bold;
-    transition: background 0.3s;
 }
 
-#downloadBtn:hover {
-    background-color: #219653;
-}
-
-/* ورقة السيرة الذاتية (حجم A4) */
-.cv-page {
+/* نمط قالب ATS المقاس A4 القياسي */
+.ats-template {
     width: 210mm;
     min-height: 297mm;
     background: white;
-    padding: 20mm;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    border-radius: 4px;
+    padding: 15mm 15mm;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    color: #000;
+    font-family: 'Arimo', Arial, sans-serif; /* خط ATS محايد وقياسي */
+    text-align: left;
+    direction: ltr; /* اتجاه إنجليزي افتراضي حسب الصورة */
 }
 
-.cv-header {
-    text-align: center;
-    margin-bottom: 20px;
+.ats-header {
+    text-align: left;
+    margin-bottom: 15px;
 }
 
-.cv-header h2 {
-    font-size: 26px;
-    color: #2c3e50;
-    margin-bottom: 5px;
+.ats-header h1 {
+    font-size: 24pt;
+    letter-spacing: 1px;
+    font-weight: bold;
+    color: #000;
+    text-transform: uppercase;
 }
 
-.cv-subtitle {
-    font-size: 16px;
-    color: #7f8c8d;
-    margin-bottom: 10px;
-    font-weight: 600;
+.ats-subtitle {
+    font-size: 10.5pt;
+    font-weight: bold;
+    margin: 3px 0 6px 0;
+    color: #222;
 }
 
-.cv-contact {
-    font-size: 13px;
-    color: #95a5a6;
+.ats-contact {
+    font-size: 8.5pt;
+    color: #333;
 }
 
-.cv-body h3 {
-    font-size: 16px;
-    color: #2c3e50;
-    margin-top: 20px;
-    margin-bottom: 8px;
-    border-bottom: 1px solid #bdc3c7;
-    padding-bottom: 4px;
+.ats-grid {
+    display: flex;
+    gap: 20px;
 }
 
-.cv-body p {
-    font-size: 14px;
-    color: #555;
+.ats-main {
+    flex: 1.6;
 }
 
-/* تنسيق خاص عند الطباعة أو التحميل كـ PDF */
+.ats-sidebar {
+    flex: 1;
+}
+
+.ats-section {
+    margin-bottom: 15px;
+}
+
+.ats-section h2 {
+    font-size: 10pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-bottom: 1px solid #000;
+    padding-bottom: 2px;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+}
+
+.ats-section p, .ats-formatted-text, .ats-section ul {
+    font-size: 8.5pt;
+    line-height: 1.35;
+    color: #111;
+}
+
+.ats-section ul {
+    padding-left: 15px;
+}
+
+.ats-section li {
+    margin-bottom: 3px;
+}
+
 @media print {
-    body {
-        background: none;
-    }
-    .main-header, .form-section, .actions-bar {
-        display: none;
-    }
-    .container {
-        display: block;
-        padding: 0;
-    }
-    .cv-page {
-        box-shadow: none;
-        margin: 0;
-        width: 100%;
-        padding: 0;
-    }
+    body { background: none; }
+    .main-header, .form-section, .actions-bar { display: none; }
+    .container { display: block; padding: 0; }
+    .ats-template { box-shadow: none; padding: 0; width: 100%; }
 }
