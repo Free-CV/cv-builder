@@ -17,10 +17,8 @@ const translations = {
         headExp: 'الخبرات العملية',
         headSkills: 'المهارات',
         headEdu: 'التعليم',
-        defaultName: 'الاسم الكامل',
-        defaultTitle: 'المسمى الوظيفي',
-        pdfBtn: 'تحميل PDF',
-        wordBtn: 'تحميل Word'
+        pdfBtn: '📥 تحميل PDF',
+        wordBtn: '📝 تحميل Word'
     },
     en: {
         lblPersonal: 'Personal Information',
@@ -38,10 +36,8 @@ const translations = {
         headExp: 'WORK EXPERIENCE',
         headSkills: 'SKILLS',
         headEdu: 'EDUCATION',
-        defaultName: 'FULL NAME',
-        defaultTitle: 'Target Job Title',
-        pdfBtn: 'Download PDF',
-        wordBtn: 'Download Word'
+        pdfBtn: '📥 Download PDF',
+        wordBtn: '📝 Download Word'
     }
 };
 
@@ -49,14 +45,20 @@ function setLanguage(lang) {
     currentLang = lang;
     const t = translations[lang];
     
-    document.getElementById('htmlRoot').setAttribute('lang', lang);
-    document.getElementById('htmlRoot').setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+    // ضبط اتجاه المستند واللغة
+    const root = document.getElementById('htmlRoot');
+    root.setAttribute('lang', lang);
+    root.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
     
-    // تبديل التفعيل للأزرار
+    const cvPreview = document.getElementById('cvPreview');
+    cvPreview.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+    cvPreview.style.textAlign = lang === 'ar' ? 'right' : 'left';
+
+    // تحديث حالة الأزرار
     document.getElementById('btnAr').classList.toggle('active-lang', lang === 'ar');
     document.getElementById('btnEn').classList.toggle('active-lang', lang === 'en');
 
-    // تحديث العناوين في النموذج
+    // تحديث العناوين للنموذج
     document.getElementById('lblPersonal').innerText = t.lblPersonal;
     document.getElementById('lblFullName').innerText = t.lblFullName;
     document.getElementById('lblJobTitle').innerText = t.lblJobTitle;
@@ -69,6 +71,7 @@ function setLanguage(lang) {
     document.getElementById('lblSkillsTitle').innerText = t.lblSkillsTitle;
     document.getElementById('lblEduTitle').innerText = t.lblEduTitle;
 
+    // تحديث عناوين المعاينة
     document.getElementById('headSummary').innerText = t.headSummary;
     document.getElementById('headExp').innerText = t.headExp;
     document.getElementById('headSkills').innerText = t.headSkills;
@@ -81,23 +84,37 @@ function setLanguage(lang) {
 }
 
 function updateCV() {
-    const t = translations[currentLang];
-    
-    document.getElementById('cvName').innerText = document.getElementById('fullName').value || t.defaultName;
-    document.getElementById('cvJobTitle').innerText = document.getElementById('jobTitle').value || t.defaultTitle;
-    document.getElementById('cvEmail').innerText = document.getElementById('email').value || 'email@example.com';
-    document.getElementById('cvLinkedin').innerText = document.getElementById('linkedin').value || 'linkedin.com/in/username';
-    document.getElementById('cvPhone').innerText = document.getElementById('phone').value || '+123456789';
-    document.getElementById('cvLocation').innerText = document.getElementById('location').value || 'City, Country';
-    document.getElementById('cvSummary').innerText = document.getElementById('summary').value || '...';
+    const fullName = document.getElementById('fullName').value.trim();
+    const jobTitle = document.getElementById('jobTitle').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const linkedin = document.getElementById('linkedin').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const location = document.getElementById('location').value.trim();
+    const summary = document.getElementById('summary').value.trim();
+    const experience = document.getElementById('experience').value.trim();
+    const skillsText = document.getElementById('skills').value.trim();
+    const education = document.getElementById('education').value.trim();
 
-    document.getElementById('cvExperience').innerHTML = formatText(document.getElementById('experience').value);
-    document.getElementById('cvEducation').innerHTML = formatText(document.getElementById('education').value);
+    // تحديث الترويسة
+    document.getElementById('cvName').innerText = fullName;
+    document.getElementById('cvJobTitle').innerText = jobTitle;
 
-    const skillsText = document.getElementById('skills').value;
-    const skillsList = document.getElementById('cvSkills');
-    skillsList.innerHTML = '';
-    if (skillsText.trim()) {
+    // تجميع بياتات الاتصال بفواصل
+    const contacts = [email, linkedin, phone, location].filter(item => item !== '');
+    document.getElementById('cvContactBar').innerText = contacts.join(' • ');
+
+    // تحديث الأقسام وإخفاء العناوين الفارغة
+    toggleSection('secSummary', summary, () => {
+        document.getElementById('cvSummary').innerText = summary;
+    });
+
+    toggleSection('secExp', experience, () => {
+        document.getElementById('cvExperience').innerHTML = formatText(experience);
+    });
+
+    toggleSection('secSkills', skillsText, () => {
+        const skillsList = document.getElementById('cvSkills');
+        skillsList.innerHTML = '';
         skillsText.split('\n').forEach(skill => {
             if (skill.trim()) {
                 const li = document.createElement('li');
@@ -105,6 +122,20 @@ function updateCV() {
                 skillsList.appendChild(li);
             }
         });
+    });
+
+    toggleSection('secEdu', education, () => {
+        document.getElementById('cvEducation').innerHTML = formatText(education);
+    });
+}
+
+function toggleSection(sectionId, value, callback) {
+    const sec = document.getElementById(sectionId);
+    if (value) {
+        sec.style.display = 'block';
+        callback();
+    } else {
+        sec.style.display = 'none';
     }
 }
 
@@ -118,19 +149,34 @@ function formatText(text) {
     }).join('');
 }
 
-// وظيفة تصدير ملف Word (.docx)
 function exportToWord() {
     const cvHtml = document.getElementById('cvPreview').innerHTML;
-    const htmlContent = `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body>${cvHtml}</body></html>`;
+    const isRtl = currentLang === 'ar';
+    const htmlContent = `
+        <!DOCTYPE html>
+        <html dir="${isRtl ? 'rtl' : 'ltr'}">
+        <head>
+            <meta charset="utf-8">
+            <style>
+                body { font-family: Arial, sans-serif; }
+                h1 { font-size: 20pt; }
+                h2 { font-size: 11pt; border-bottom: 1px solid #000; }
+                p, div, li { font-size: 9.5pt; }
+            </style>
+        </head>
+        <body>${cvHtml}</body>
+        </html>
+    `;
     
     const converted = htmlDocx.asBlob(htmlContent);
     const url = URL.createObjectURL(converted);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'CV-ATS.docx';
+    a.download = isRtl ? 'السيرة-الذاتية.docx' : 'CV-ATS.docx';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
 }
 
+// التشغيل الافتراضي عند الفتح
 window.onload = () => setLanguage('ar');
