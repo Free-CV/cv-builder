@@ -3,20 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>صانع السيرة الذاتية - ATS Format</title>
-    <!-- خطوط جوجل الاحترافية -->
+    <title>صانع السيرة الذاتية الاحترافية - ATS Format</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <!-- مكتبة تحويل HTML إلى Word -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html-docx-js/0.3.1/html-docx.js"></script>
 </head>
 <body>
 
     <header class="main-header">
         <div class="header-title">
-            <h1>صانع السير الذاتية (ATS Format)</h1>
+            <h1>صانع السير الذاتية المهني (ATS)</h1>
         </div>
-        <!-- خيار اختيار اللغة -->
         <div class="lang-selector">
             <button onclick="setLanguage('ar')" id="btnAr" class="lang-btn active-lang">العربية</button>
             <button onclick="setLanguage('en')" id="btnEn" class="lang-btn">English</button>
@@ -27,24 +23,48 @@
         <!-- قسم إدخال البيانات -->
         <section class="form-section">
             <h2 id="lblPersonal">البيانات الشخصية</h2>
-            <div class="form-group"><label id="lblFullName">الاسم الكامل</label><input type="text" id="fullName" placeholder="" oninput="updateCV()"></div>
-            <div class="form-group"><label id="lblJobTitle">المسمى الوظيفي</label><input type="text" id="jobTitle" placeholder="" oninput="updateCV()"></div>
-            <div class="form-group"><label id="lblEmail">البريد الإلكتروني</label><input type="email" id="email" placeholder="" oninput="updateCV()"></div>
-            <div class="form-group"><label id="lblLinkedin">رابط LinkedIn</label><input type="text" id="linkedin" placeholder="" oninput="updateCV()"></div>
-            <div class="form-group"><label id="lblPhone">الهاتف</label><input type="text" id="phone" placeholder="" oninput="updateCV()"></div>
-            <div class="form-group"><label id="lblLocation">المدينة والبلد</label><input type="text" id="location" placeholder="" oninput="updateCV()"></div>
+            <div class="form-group"><label id="lblFullName">الاسم الكامل</label><input type="text" id="fullName" oninput="updateCV()"></div>
+            <div class="form-group"><label id="lblJobTitle">المسمى الوظيفي</label><input type="text" id="jobTitle" oninput="updateCV()"></div>
+            <div class="form-group"><label id="lblEmail">البريد الإلكتروني</label><input type="email" id="email" oninput="updateCV()"></div>
+            <div class="form-group"><label id="lblLinkedin">رابط LinkedIn</label><input type="text" id="linkedin" oninput="updateCV()"></div>
+            <div class="form-group"><label id="lblPhone">الهاتف</label><input type="text" id="phone" oninput="updateCV()"></div>
+            <div class="form-group"><label id="lblLocation">المدينة والبلد</label><input type="text" id="location" oninput="updateCV()"></div>
 
             <h2 id="lblSummaryTitle">الملخص المهني</h2>
-            <div class="form-group"><textarea id="summary" rows="3" placeholder="" oninput="updateCV()"></textarea></div>
+            <div class="form-group"><textarea id="summary" rows="3" oninput="updateCV()"></textarea></div>
 
-            <h2 id="lblExpTitle">الخبرات العملية</h2>
-            <div class="form-group"><textarea id="experience" rows="5" placeholder="" oninput="updateCV()"></textarea></div>
+            <h2 id="lblExpTitle">الخبرة العملية</h2>
+            <div class="form-group"><label id="lblCompany">جهة العمل / الشركة</label><input type="text" id="expCompany" oninput="updateCV()"></div>
+            <div class="form-group"><label id="lblExpRole">المسمى الوظيفي</label><input type="text" id="expRole" oninput="updateCV()"></div>
+            <div class="form-row">
+                <div class="form-group"><label id="lblStartDate">تاريخ البدء</label><input type="text" id="expStartDate" placeholder="MM/YYYY" oninput="updateCV()"></div>
+                <div class="form-group"><label id="lblEndDate">تاريخ الانتهاء</label><input type="text" id="expEndDate" placeholder="MM/YYYY" oninput="updateCV()"></div>
+            </div>
+            <div class="form-group checkbox-group">
+                <input type="checkbox" id="expPresent" onchange="togglePresentWork(this)">
+                <label for="expPresent" id="lblPresent">ما زلت أعمل هنا</label>
+            </div>
+            <div class="form-group"><label id="lblExpDesc">المهام والإنجازات (ضع • أو - للأنشطة)</label><textarea id="expDesc" rows="4" oninput="updateCV()"></textarea></div>
 
-            <h2 id="lblSkillsTitle">المهارات</h2>
-            <div class="form-group"><textarea id="skills" rows="3" placeholder="" oninput="updateCV()"></textarea></div>
+            <h2 id="lblEduTitle">التعليم والتأهيل</h2>
+            <div class="form-group"><label id="lblSchool">المكان / الجامعة / المؤسسة</label><input type="text" id="eduSchool" oninput="updateCV()"></div>
+            <div class="form-group"><label id="lblDegree">الشهادة والتخصص</label><input type="text" id="eduDegree" oninput="updateCV()"></div>
+            <div class="form-group"><label id="lblGradDate">تاريخ الحصول على الشهادة / التخرج</label><input type="text" id="eduGradDate" placeholder="YYYY" oninput="updateCV()"></div>
 
-            <h2 id="lblEduTitle">التعليم</h2>
-            <div class="form-group"><textarea id="education" rows="3" placeholder="" oninput="updateCV()"></textarea></div>
+            <h2 id="lblCompTitle">الكفاءات الأساسية</h2>
+            <div class="form-group"><textarea id="competencies" rows="3" placeholder="مثال: إدارة المشاريع، التفكير الاستراتيجي..." oninput="updateCV()"></textarea></div>
+
+            <h2 id="lblSkillsTitle">المهارات التقنية والشخصية</h2>
+            <div class="form-group"><textarea id="skills" rows="3" placeholder="سطر لكل مهارة..." oninput="updateCV()"></textarea></div>
+
+            <h2 id="lblCertsTitle">الشهادات المهنية والدورات</h2>
+            <div class="form-group"><textarea id="certifications" rows="3" oninput="updateCV()"></textarea></div>
+
+            <h2 id="lblProjectsTitle">المشاريع / الإنجازات</h2>
+            <div class="form-group"><textarea id="projects" rows="3" oninput="updateCV()"></textarea></div>
+
+            <h2 id="lblLangTitle">اللغات</h2>
+            <div class="form-group"><textarea id="languages" rows="2" placeholder="العربية (اللغة الأم)، الإنجليزية (متقدم)..." oninput="updateCV()"></textarea></div>
         </section>
 
         <!-- قسم المعاينة والتصدير -->
@@ -66,31 +86,56 @@
                         <div class="ats-contact" id="cvContactBar"></div>
                     </header>
 
-                    <div class="ats-grid">
-                        <div class="ats-main">
-                            <section class="ats-section" id="secSummary">
-                                <h2 id="headSummary">الملخص المهني</h2>
-                                <p id="cvSummary"></p>
-                            </section>
+                    <main class="ats-single-column">
+                        <section class="ats-section" id="secSummary">
+                            <h2 id="headSummary">الملخص المهني</h2>
+                            <p id="cvSummary"></p>
+                        </section>
 
-                            <section class="ats-section" id="secExp">
-                                <h2 id="headExp">الخبرات العملية</h2>
-                                <div id="cvExperience" class="ats-formatted-text"></div>
-                            </section>
-                        </div>
+                        <section class="ats-section" id="secExp">
+                            <h2 id="headExp">الخبرات العملية</h2>
+                            <div class="ats-item-header">
+                                <span id="cvExpRole" class="bold-text"></span>
+                                <span id="cvExpDates" class="date-text"></span>
+                            </div>
+                            <div id="cvExpCompany" class="subbold-text"></div>
+                            <div id="cvExpDesc" class="ats-formatted-text"></div>
+                        </section>
 
-                        <div class="ats-sidebar">
-                            <section class="ats-section" id="secSkills">
-                                <h2 id="headSkills">المهارات</h2>
-                                <ul id="cvSkills"></ul>
-                            </section>
+                        <section class="ats-section" id="secEdu">
+                            <h2 id="headEdu">التعليم</h2>
+                            <div class="ats-item-header">
+                                <span id="cvEduDegree" class="bold-text"></span>
+                                <span id="cvEduDate" class="date-text"></span>
+                            </div>
+                            <div id="cvEduSchool" class="subbold-text"></div>
+                        </section>
 
-                            <section class="ats-section" id="secEdu">
-                                <h2 id="headEdu">التعليم</h2>
-                                <div id="cvEducation" class="ats-formatted-text"></div>
-                            </section>
-                        </div>
-                    </div>
+                        <section class="ats-section" id="secComp">
+                            <h2 id="headComp">الكفاءات الأساسية</h2>
+                            <div id="cvCompetencies" class="ats-formatted-text"></div>
+                        </section>
+
+                        <section class="ats-section" id="secSkills">
+                            <h2 id="headSkills">المهارات</h2>
+                            <ul id="cvSkills"></ul>
+                        </section>
+
+                        <section class="ats-section" id="secCerts">
+                            <h2 id="headCerts">الشهادات والدورات</h2>
+                            <div id="cvCertifications" class="ats-formatted-text"></div>
+                        </section>
+
+                        <section class="ats-section" id="secProjects">
+                            <h2 id="headProjects">المشاريع والإنجازات</h2>
+                            <div id="cvProjects" class="ats-formatted-text"></div>
+                        </section>
+
+                        <section class="ats-section" id="secLang">
+                            <h2 id="headLang">اللغات</h2>
+                            <div id="cvLanguages" class="ats-formatted-text"></div>
+                        </section>
+                    </main>
                 </div>
             </div>
         </section>
