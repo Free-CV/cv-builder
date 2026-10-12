@@ -3,70 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة صانع السير الذاتية</title>
-    <!-- خطوط جوجل العربية -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>صانع السيرة الذاتية متوافق مع ATS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400;0,700;1,400&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <header class="main-header">
-        <h1>صانع السير الذاتية الاحترافية</h1>
-        <p>صمم سيرتك الذاتية وحملها كملف PDF بكل سهولة</p>
+        <h1>صانع السير الذاتية - قالب ATS الاحترافي</h1>
     </header>
 
     <div class="container">
-        <!-- قسم نموذج الإدخال -->
+        <!-- قسم إدخال البيانات -->
         <section class="form-section">
-            <h2>بيانات السيرة الذاتية</h2>
-            
-            <div class="form-group">
-                <label for="fullName">الاسم الكامل</label>
-                <input type="text" id="fullName" placeholder="مثال: أحمد محمد" oninput="updateCV()">
-            </div>
+            <h2>البيانات الشخصية</h2>
+            <div class="form-group"><label>الاسم الكامل</label><input type="text" id="fullName" value="ALEX MORGAN" oninput="updateCV()"></div>
+            <div class="form-group"><label>المسمى الوظيفي</label><input type="text" id="jobTitle" value="Senior Product Lead | Growth & Platform Strategy" oninput="updateCV()"></div>
+            <div class="form-group"><label>البريد الإلكتروني</label><input type="email" id="email" value="alexmorgan@gmail.com" oninput="updateCV()"></div>
+            <div class="form-group"><label>رابط LinkedIn</label><input type="text" id="linkedin" value="linkedin.com/in/alexmorgan" oninput="updateCV()"></div>
+            <div class="form-group"><label>الهاتف</label><input type="text" id="phone" value="(547) 890-1234" oninput="updateCV()"></div>
+            <div class="form-group"><label>المدينة والبلد</label><input type="text" id="location" value="Austin, Texas" oninput="updateCV()"></div>
 
-            <div class="form-group">
-                <label for="jobTitle">المسمى الوظيفي المستهدف</label>
-                <input type="text" id="jobTitle" placeholder="مثال: مطور وواجهات أمامية" oninput="updateCV()">
-            </div>
+            <h2>الملخص المهني</h2>
+            <div class="form-group"><textarea id="summary" rows="3" oninput="updateCV()">An organized, results-oriented Customer Service Professional with an excellent track record of significantly increasing service quality, sales, and customer base.</textarea></div>
 
-            <div class="form-group">
-                <label for="email">البريد الإلكتروني</label>
-                <input type="email" id="email" placeholder="name@example.com" oninput="updateCV()">
-            </div>
+            <h2>الخبرات العملية</h2>
+            <div class="form-group"><textarea id="experience" rows="6" oninput="updateCV()">Senior Product Lead | Feb 2020 - Present
+FinEdge Technologies - Austin, Texas
+• Spearheaded the launch of a B2B analytics platform, driving a 30% increase in enterprise client adoption within one year.
+• Led a cross-functional squad of engineers, designers, and data analysts to deliver scalable product features.</textarea></div>
 
-            <div class="form-group">
-                <label for="phone">رقم الهاتف</label>
-                <input type="text" id="phone" placeholder="+966 50 000 0000" oninput="updateCV()">
-            </div>
+            <h2>المهارات (افصل بينها بسطر جديد)</h2>
+            <div class="form-group"><textarea id="skills" rows="4" oninput="updateCV()">Product Roadmapping
+Stakeholder Management
+Agile Product Development
+User Research & Testing</textarea></div>
 
-            <div class="form-group">
-                <label for="summary">الملخص المهني</label>
-                <textarea id="summary" rows="4" placeholder="اكتب نبذة مختصرة عن خبراتك..." oninput="updateCV()"></textarea>
-            </div>
+            <h2>التعليم</h2>
+            <div class="form-group"><textarea id="education" rows="4" oninput="updateCV()">Master of Science in Management
+University of Texas at Austin
+
+Bachelor of Engineering in Information Technology
+University of Texas at Austin</textarea></div>
         </section>
 
-        <!-- قسم المعاينة الحية -->
+        <!-- قسم المعاينة (تصميم ATS متطابق) -->
         <section class="preview-section">
             <div class="actions-bar">
                 <button id="downloadBtn" onclick="window.print()">تحميل PDF</button>
             </div>
             
-            <div class="cv-page" id="cvPreview">
-                <header class="cv-header">
-                    <h2 id="cvName">الاسم الكامل</h2>
-                    <p id="cvJobTitle" class="cv-subtitle">المسمى الوظيفي</p>
-                    <div class="cv-contact">
-                        <span id="cvEmail">email@example.com</span> | 
-                        <span id="cvPhone">+966 50 000 0000</span>
+            <div class="cv-page ats-template" id="cvPreview">
+                <!-- Header -->
+                <header class="ats-header">
+                    <h1 id="cvName">ALEX MORGAN</h1>
+                    <div id="cvJobTitle" class="ats-subtitle">Senior Product Lead | Growth & Platform Strategy</div>
+                    <div class="ats-contact">
+                        <span id="cvEmail">alexmorgan@gmail.com</span> • 
+                        <span id="cvLinkedin">linkedin.com/in/alexmorgan</span> • 
+                        <span id="cvPhone">(547) 890-1234</span> • 
+                        <span id="cvLocation">Austin, Texas</span>
                     </div>
                 </header>
-                
-                <hr>
 
-                <div class="cv-body">
-                    <h3>الملخص المهني</h3>
-                    <p id="cvSummary">اكتب نبذة مختصرة عن خبراتك هنا لتظهر معاينة مباشرة...</p>
+                <!-- Two Column Layout -->
+                <div class="ats-grid">
+                    <!-- Main Left/Right Column -->
+                    <div class="ats-main">
+                        <section class="ats-section">
+                            <h2>SUMMARY</h2>
+                            <p id="cvSummary">An organized, results-oriented Customer Service Professional...</p>
+                        </section>
+
+                        <section class="ats-section">
+                            <h2>WORK EXPERIENCE</h2>
+                            <div id="cvExperience" class="ats-formatted-text"></div>
+                        </section>
+                    </div>
+
+                    <!-- Sidebar Column -->
+                    <div class="ats-sidebar">
+                        <section class="ats-section">
+                            <h2>SKILLS</h2>
+                            <ul id="cvSkills"></ul>
+                        </section>
+
+                        <section class="ats-section">
+                            <h2>EDUCATION</h2>
+                            <div id="cvEducation" class="ats-formatted-text"></div>
+                        </section>
+                    </div>
                 </div>
             </div>
         </section>
