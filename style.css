@@ -2,84 +2,120 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Cairo', Arial, sans-serif;
+    font-family: 'Cairo', 'Inter', sans-serif;
 }
 
 body {
-    background-color: #2b2b2b;
-    color: #333;
+    background-color: #f0f2f5;
+    color: #2c3e50;
 }
 
+/* شريط العنوان العلوي */
 .main-header {
-    text-align: center;
-    background-color: #1a1a1a;
+    background-color: #1e293b;
     color: white;
-    padding: 15px;
+    padding: 15px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-left: 30px;
-    padding-right: 30px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
-.lang-selector button {
-    background: #444;
-    color: white;
+.main-header h1 {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+/* تحسين شكل أزرار اللغة */
+.lang-selector {
+    display: flex;
+    background: #0f172a;
+    padding: 4px;
+    border-radius: 8px;
+    gap: 4px;
+}
+
+.lang-btn {
+    background: transparent;
+    color: #94a3b8;
     border: none;
-    padding: 6px 12px;
+    padding: 8px 16px;
     cursor: pointer;
-    border-radius: 4px;
-    margin-left: 5px;
-    font-weight: bold;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s ease;
 }
 
-.lang-selector button.active-lang {
-    background: #008cba;
+.lang-btn:hover {
+    color: white;
 }
 
+.lang-btn.active-lang {
+    background: #2563eb;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* التخطيط العام */
 .container {
     display: flex;
-    gap: 20px;
-    padding: 20px;
+    gap: 25px;
+    padding: 25px;
     max-width: 1500px;
     margin: 0 auto;
 }
 
+/* قسم نموذج الإدخال */
 .form-section {
     flex: 1;
     background: white;
-    padding: 20px;
-    border-radius: 8px;
-    max-height: 90vh;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    max-height: calc(100vh - 100px);
     overflow-y: auto;
 }
 
 .form-section h2 {
-    font-size: 16px;
-    margin: 15px 0 8px 0;
-    color: #111;
-    border-bottom: 1px solid #ccc;
+    font-size: 15px;
+    margin: 20px 0 10px 0;
+    color: #1e293b;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 6px;
+}
+
+.form-section h2:first-of-type {
+    margin-top: 0;
 }
 
 .form-group {
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
 .form-group label {
     display: block;
     font-size: 12px;
-    font-weight: bold;
-    margin-bottom: 3px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #475569;
 }
 
 .form-group input, .form-group textarea {
     width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
     font-size: 13px;
+    transition: border-color 0.2s;
 }
 
+.form-group input:focus, .form-group textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+
+/* قسم المعاينة */
 .preview-section {
     flex: 1.2;
     display: flex;
@@ -87,41 +123,63 @@ body {
     align-items: center;
 }
 
+/* تحسين شكل أزرار التحميل */
 .actions-bar {
-    width: 210mm;
-    margin-bottom: 10px;
+    width: 100%;
+    max-width: 210mm;
+    margin-bottom: 15px;
     display: flex;
-    gap: 10px;
+    gap: 12px;
 }
 
-#downloadPdfBtn {
-    background: #e74c3c;
-    color: white;
+.action-btn {
+    flex: 1;
+    padding: 12px 20px;
     border: none;
-    padding: 8px 15px;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
-    font-weight: bold;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-#downloadWordBtn {
-    background: #2980b9;
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.pdf-btn {
+    background: #dc2626;
     color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
+}
+
+.word-btn {
+    background: #2563eb;
+    color: white;
+}
+
+/* إطار ورقة المعاينة A4 */
+.cv-card-wrapper {
+    width: 100%;
+    max-width: 210mm;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    overflow: hidden;
 }
 
 .ats-template {
     width: 210mm;
     min-height: 297mm;
     background: white;
-    padding: 15mm 15mm;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    padding: 15mm;
     color: #000;
-    font-family: Arial, sans-serif;
+    box-sizing: border-box;
 }
 
 .ats-header {
@@ -129,23 +187,23 @@ body {
 }
 
 .ats-header h1 {
-    font-size: 24pt;
-    letter-spacing: 1px;
+    font-size: 22pt;
     font-weight: bold;
     color: #000;
     text-transform: uppercase;
+    margin-bottom: 4px;
 }
 
 .ats-subtitle {
-    font-size: 10.5pt;
+    font-size: 11pt;
     font-weight: bold;
-    margin: 3px 0 6px 0;
-    color: #222;
+    color: #333;
+    margin-bottom: 6px;
 }
 
 .ats-contact {
-    font-size: 8.5pt;
-    color: #333;
+    font-size: 9pt;
+    color: #444;
 }
 
 .ats-grid {
@@ -175,22 +233,25 @@ body {
 }
 
 .ats-section p, .ats-formatted-text, .ats-section ul {
-    font-size: 8.5pt;
-    line-height: 1.35;
+    font-size: 9pt;
+    line-height: 1.4;
     color: #111;
 }
 
 .ats-section ul {
-    padding-left: 15px;
+    padding-left: 18px;
+    padding-right: 18px;
 }
 
 .ats-section li {
-    margin-bottom: 3px;
+    margin-bottom: 4px;
 }
 
+/* الطباعة */
 @media print {
     body { background: none; }
-    .main-header, .form-section, .actions-bar { display: none; }
+    .main-header, .form-section, .actions-bar { display: none !important; }
     .container { display: block; padding: 0; }
-    .ats-template { box-shadow: none; padding: 0; width: 100%; }
+    .preview-section, .cv-card-wrapper { width: 100%; box-shadow: none; border-radius: 0; }
+    .ats-template { padding: 0; width: 100%; }
 }
