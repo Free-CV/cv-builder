@@ -79,6 +79,66 @@ body {
     margin-top: 0;
 }
 
+/* تحسين أزرار الإضافة والتنسيق الديناميكي */
+.section-header-repeat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #e2e8f0;
+    margin: 20px 0 10px 0;
+    padding-bottom: 6px;
+}
+
+.section-header-repeat h2 {
+    border-bottom: none;
+    margin: 0;
+    padding: 0;
+}
+
+.add-more-btn {
+    background: #e0e7ff;
+    color: #3730a3;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.add-more-btn:hover {
+    background: #c7d2fe;
+}
+
+.dynamic-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.remove-card-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #fee2e2;
+    color: #991b1b;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+[dir="ltr"] .remove-card-btn {
+    left: auto;
+    right: 10px;
+}
+
 .form-group {
     margin-bottom: 12px;
 }
@@ -164,7 +224,7 @@ body {
     box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
 
-/* ورقة الـ ATS العمود الواعد المرتب تحت بعضه */
+/* ATS Single Column Format */
 .ats-template {
     width: 210mm;
     min-height: 297mm;
@@ -209,7 +269,11 @@ body {
     text-transform: uppercase;
     border-bottom: 1px solid #000;
     padding-bottom: 2px;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
+}
+
+.ats-item {
+    margin-bottom: 10px;
 }
 
 .ats-section p, .ats-formatted-text, .ats-section ul {
@@ -233,7 +297,7 @@ body {
     font-weight: 600;
     font-size: 9pt;
     color: #222;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
 }
 
 .date-text {
