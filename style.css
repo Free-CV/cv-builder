@@ -15,6 +15,26 @@ body {
     background-color: #1a1a1a;
     color: white;
     padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.lang-selector button {
+    background: #444;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-left: 5px;
+    font-weight: bold;
+}
+
+.lang-selector button.active-lang {
+    background: #008cba;
 }
 
 .container {
@@ -70,20 +90,30 @@ body {
 .actions-bar {
     width: 210mm;
     margin-bottom: 10px;
-    text-align: left;
+    display: flex;
+    gap: 10px;
 }
 
-#downloadBtn {
-    background: #008cba;
+#downloadPdfBtn {
+    background: #e74c3c;
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 8px 15px;
     border-radius: 4px;
     cursor: pointer;
     font-weight: bold;
 }
 
-/* نمط قالب ATS المقاس A4 القياسي */
+#downloadWordBtn {
+    background: #2980b9;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
 .ats-template {
     width: 210mm;
     min-height: 297mm;
@@ -91,13 +121,10 @@ body {
     padding: 15mm 15mm;
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
     color: #000;
-    font-family: 'Arimo', Arial, sans-serif; /* خط ATS محايد وقياسي */
-    text-align: left;
-    direction: ltr; /* اتجاه إنجليزي افتراضي حسب الصورة */
+    font-family: Arial, sans-serif;
 }
 
 .ats-header {
-    text-align: left;
     margin-bottom: 15px;
 }
 
@@ -145,7 +172,6 @@ body {
     border-bottom: 1px solid #000;
     padding-bottom: 2px;
     margin-bottom: 6px;
-    letter-spacing: 0.5px;
 }
 
 .ats-section p, .ats-formatted-text, .ats-section ul {
