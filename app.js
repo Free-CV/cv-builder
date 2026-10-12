@@ -1,4 +1,6 @@
 let currentLang = 'ar';
+let expCount = 0;
+let eduCount = 0;
 
 const translations = {
     ar: {
@@ -11,6 +13,7 @@ const translations = {
         lblLocation: 'المدينة والبلد',
         lblSummaryTitle: 'الملخص المهني',
         lblExpTitle: 'الخبرة العملية',
+        btnAddExp: '+ إضافة خبرة أخرى',
         lblCompany: 'جهة العمل / الشركة',
         lblExpRole: 'المسمى الوظيفي',
         lblStartDate: 'تاريخ البدء',
@@ -18,6 +21,7 @@ const translations = {
         lblPresent: 'ما زلت أعمل هنا',
         lblExpDesc: 'المهام والإنجازات',
         lblEduTitle: 'التعليم والتأهيل',
+        btnAddEdu: '+ إضافة مؤهل آخر',
         lblSchool: 'المكان / الجامعة / المؤسسة',
         lblDegree: 'الشهادة والتخصص',
         lblGradDate: 'تاريخ الحصول على الشهادة',
@@ -35,6 +39,7 @@ const translations = {
         headProjects: 'المشاريع والإنجازات',
         headLang: 'اللغات',
         presentText: 'حتى الآن',
+        btnDelete: 'حذف',
         pdfBtn: '📥 تحميل PDF',
         wordBtn: '📝 تحميل Word'
     },
@@ -48,6 +53,7 @@ const translations = {
         lblLocation: 'City, Country',
         lblSummaryTitle: 'Professional Summary',
         lblExpTitle: 'Work Experience',
+        btnAddExp: '+ Add Experience',
         lblCompany: 'Company / Organization',
         lblExpRole: 'Job Title / Role',
         lblStartDate: 'Start Date',
@@ -55,6 +61,7 @@ const translations = {
         lblPresent: 'I currently work here',
         lblExpDesc: 'Key Responsibilities & Achievements',
         lblEduTitle: 'Education',
+        btnAddEdu: '+ Add Education',
         lblSchool: 'University / Institution',
         lblDegree: 'Degree & Field of Study',
         lblGradDate: 'Graduation Year',
@@ -72,6 +79,7 @@ const translations = {
         headProjects: 'PROJECTS',
         headLang: 'LANGUAGES',
         presentText: 'Present',
+        btnDelete: 'Delete',
         pdfBtn: '📥 Download PDF',
         wordBtn: '📝 Download Word'
     }
@@ -102,16 +110,9 @@ function setLanguage(lang) {
     document.getElementById('lblLocation').innerText = t.lblLocation;
     document.getElementById('lblSummaryTitle').innerText = t.lblSummaryTitle;
     document.getElementById('lblExpTitle').innerText = t.lblExpTitle;
-    document.getElementById('lblCompany').innerText = t.lblCompany;
-    document.getElementById('lblExpRole').innerText = t.lblExpRole;
-    document.getElementById('lblStartDate').innerText = t.lblStartDate;
-    document.getElementById('lblEndDate').innerText = t.lblEndDate;
-    document.getElementById('lblPresent').innerText = t.lblPresent;
-    document.getElementById('lblExpDesc').innerText = t.lblExpDesc;
+    document.getElementById('btnAddExp').innerText = t.btnAddExp;
     document.getElementById('lblEduTitle').innerText = t.lblEduTitle;
-    document.getElementById('lblSchool').innerText = t.lblSchool;
-    document.getElementById('lblDegree').innerText = t.lblDegree;
-    document.getElementById('lblGradDate').innerText = t.lblGradDate;
+    document.getElementById('btnAddEdu').innerText = t.btnAddEdu;
     document.getElementById('lblCompTitle').innerText = t.lblCompTitle;
     document.getElementById('lblSkillsTitle').innerText = t.lblSkillsTitle;
     document.getElementById('lblCertsTitle').innerText = t.lblCertsTitle;
@@ -133,8 +134,63 @@ function setLanguage(lang) {
     updateCV();
 }
 
+// دالة إضافة خبرة جديدة
+function addExperienceGroup() {
+    expCount++;
+    const t = translations[currentLang];
+    const container = document.getElementById('experienceContainer');
+    const div = document.createElement('div');
+    div.className = 'dynamic-card';
+    div.id = `expCard_${expCount}`;
+    
+    div.innerHTML = `
+        <button type="button" class="remove-card-btn" onclick="removeCard('expCard_${expCount}')">${t.btnDelete}</button>
+        <div class="form-group"><label>${t.lblCompany}</label><input type="text" class="expCompany" oninput="updateCV()"></div>
+        <div class="form-group"><label>${t.lblExpRole}</label><input type="text" class="expRole" oninput="updateCV()"></div>
+        <div class="form-row">
+            <div class="form-group"><label>${t.lblStartDate}</label><input type="text" class="expStartDate" placeholder="MM/YYYY" oninput="updateCV()"></div>
+            <div class="form-group"><label>${t.lblEndDate}</label><input type="text" class="expEndDate" placeholder="MM/YYYY" oninput="updateCV()"></div>
+        </div>
+        <div class="form-group checkbox-group">
+            <input type="checkbox" class="expPresent" id="chkPresent_${expCount}" onchange="togglePresentWork(this)">
+            <label for="chkPresent_${expCount}">${t.lblPresent}</label>
+        </div>
+        <div class="form-group"><label>${t.lblExpDesc}</label><textarea class="expDesc" rows="3" oninput="updateCV()"></textarea></div>
+    `;
+    container.appendChild(div);
+    updateCV();
+}
+
+// دالة إضافة تعليم جديد
+function addEducationGroup() {
+    eduCount++;
+    const t = translations[currentLang];
+    const container = document.getElementById('educationContainer');
+    const div = document.createElement('div');
+    div.className = 'dynamic-card';
+    div.id = `eduCard_${eduCount}`;
+    
+    div.innerHTML = `
+        <button type="button" class="remove-card-btn" onclick="removeCard('eduCard_${eduCount}')">${t.btnDelete}</button>
+        <div class="form-group"><label>${t.lblSchool}</label><input type="text" class="eduSchool" oninput="updateCV()"></div>
+        <div class="form-group"><label>${t.lblDegree}</label><input type="text" class="eduDegree" oninput="updateCV()"></div>
+        <div class="form-group"><label>${t.lblGradDate}</label><input type="text" class="eduGradDate" placeholder="YYYY" oninput="updateCV()"></div>
+    `;
+    container.appendChild(div);
+    updateCV();
+}
+
+function removeCard(cardId) {
+    const card = document.getElementById(cardId);
+    if (card) {
+        card.remove();
+        updateCV();
+    }
+}
+
 function togglePresentWork(checkbox) {
-    const endDateInput = document.getElementById('expEndDate');
+    const card = checkbox.closest('.dynamic-card');
+    const endDateInput = card.querySelector('.expEndDate');
     if (checkbox.checked) {
         endDateInput.value = '';
         endDateInput.disabled = true;
@@ -166,38 +222,67 @@ function updateCV() {
         document.getElementById('cvSummary').innerText = summary;
     });
 
-    // 2. الخبرات العملية
-    const expRole = document.getElementById('expRole').value.trim();
-    const expCompany = document.getElementById('expCompany').value.trim();
-    const expStartDate = document.getElementById('expStartDate').value.trim();
-    const isPresent = document.getElementById('expPresent').checked;
-    const expEndDate = isPresent ? t.presentText : document.getElementById('expEndDate').value.trim();
-    const expDesc = document.getElementById('expDesc').value.trim();
+    // 2. تجميع الخبرات العملية المتعددة
+    const expCards = document.querySelectorAll('#experienceContainer .dynamic-card');
+    const expListContainer = document.getElementById('cvExperienceList');
+    expListContainer.innerHTML = '';
+    let hasAnyExp = false;
 
-    const hasExp = expRole || expCompany || expDesc;
-    toggleSection('secExp', hasExp, () => {
-        document.getElementById('cvExpRole').innerText = expRole;
-        document.getElementById('cvExpCompany').innerText = expCompany;
-        
-        let dateStr = '';
-        if (expStartDate && expEndDate) dateStr = `${expStartDate} - ${expEndDate}`;
-        else if (expStartDate) dateStr = expStartDate;
-        document.getElementById('cvExpDates').innerText = dateStr;
+    expCards.forEach(card => {
+        const role = card.querySelector('.expRole').value.trim();
+        const company = card.querySelector('.expCompany').value.trim();
+        const startDate = card.querySelector('.expStartDate').value.trim();
+        const isPresent = card.querySelector('.expPresent').checked;
+        const endDate = isPresent ? t.presentText : card.querySelector('.expEndDate').value.trim();
+        const desc = card.querySelector('.expDesc').value.trim();
 
-        document.getElementById('cvExpDesc').innerHTML = formatText(expDesc);
+        if (role || company || desc) {
+            hasAnyExp = true;
+            let dateStr = '';
+            if (startDate && endDate) dateStr = `${startDate} - ${endDate}`;
+            else if (startDate) dateStr = startDate;
+
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'ats-item';
+            itemDiv.innerHTML = `
+                <div class="ats-item-header">
+                    <span class="bold-text">${role}</span>
+                    <span class="date-text">${dateStr}</span>
+                </div>
+                <div class="subbold-text">${company}</div>
+                <div class="ats-formatted-text">${formatText(desc)}</div>
+            `;
+            expListContainer.appendChild(itemDiv);
+        }
     });
+    toggleSection('secExp', hasAnyExp, () => {});
 
-    // 3. التعليم
-    const eduSchool = document.getElementById('eduSchool').value.trim();
-    const eduDegree = document.getElementById('eduDegree').value.trim();
-    const eduGradDate = document.getElementById('eduGradDate').value.trim();
+    // 3. تجميع مؤهلات التعليم المتعددة
+    const eduCards = document.querySelectorAll('#educationContainer .dynamic-card');
+    const eduListContainer = document.getElementById('cvEducationList');
+    eduListContainer.innerHTML = '';
+    let hasAnyEdu = false;
 
-    const hasEdu = eduSchool || eduDegree;
-    toggleSection('secEdu', hasEdu, () => {
-        document.getElementById('cvEduDegree').innerText = eduDegree;
-        document.getElementById('cvEduSchool').innerText = eduSchool;
-        document.getElementById('cvEduDate').innerText = eduGradDate;
+    eduCards.forEach(card => {
+        const school = card.querySelector('.eduSchool').value.trim();
+        const degree = card.querySelector('.eduDegree').value.trim();
+        const gradDate = card.querySelector('.eduGradDate').value.trim();
+
+        if (school || degree) {
+            hasAnyEdu = true;
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'ats-item';
+            itemDiv.innerHTML = `
+                <div class="ats-item-header">
+                    <span class="bold-text">${degree}</span>
+                    <span class="date-text">${gradDate}</span>
+                </div>
+                <div class="subbold-text">${school}</div>
+            `;
+            eduListContainer.appendChild(itemDiv);
+        }
     });
+    toggleSection('secEdu', hasAnyEdu, () => {});
 
     // 4. الكفاءات
     const compText = document.getElementById('competencies').value.trim();
@@ -242,7 +327,7 @@ function toggleSection(sectionId, condition, callback) {
     const sec = document.getElementById(sectionId);
     if (condition) {
         sec.style.display = 'block';
-        callback();
+        if (callback) callback();
     } else {
         sec.style.display = 'none';
     }
@@ -258,7 +343,6 @@ function formatText(text) {
     }).join('');
 }
 
-// حل مشكلة تصدير ملف Word بوظيفة مدمجة عالية التوافق
 function exportToWord() {
     const cvHtml = document.getElementById('cvPreview').outerHTML;
     const isRtl = currentLang === 'ar';
@@ -285,4 +369,9 @@ function exportToWord() {
     document.body.removeChild(fileDownload);
 }
 
-window.onload = () => setLanguage('ar');
+// التشغيل الافتراضي مع إضافة أول بطاقة خبرة وتعليم تلقائياً
+window.onload = () => {
+    setLanguage('ar');
+    addExperienceGroup();
+    addEducationGroup();
+};
