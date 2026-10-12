@@ -24,7 +24,6 @@
         <section class="form-section">
             <h2 id="lblPersonal">البيانات الشخصية</h2>
             <div class="form-group"><label id="lblFullName">الاسم الكامل</label><input type="text" id="fullName" oninput="updateCV()"></div>
-            <div class="form-group"><label id="lblJobTitle">المسمى الوظيفي</label><input type="text" id="jobTitle" oninput="updateCV()"></div>
             <div class="form-group"><label id="lblEmail">البريد الإلكتروني</label><input type="email" id="email" oninput="updateCV()"></div>
             <div class="form-group"><label id="lblLinkedin">رابط LinkedIn</label><input type="text" id="linkedin" oninput="updateCV()"></div>
             <div class="form-group"><label id="lblPhone">الهاتف</label><input type="text" id="phone" oninput="updateCV()"></div>
@@ -33,23 +32,19 @@
             <h2 id="lblSummaryTitle">الملخص المهني</h2>
             <div class="form-group"><textarea id="summary" rows="3" oninput="updateCV()"></textarea></div>
 
-            <h2 id="lblExpTitle">الخبرة العملية</h2>
-            <div class="form-group"><label id="lblCompany">جهة العمل / الشركة</label><input type="text" id="expCompany" oninput="updateCV()"></div>
-            <div class="form-group"><label id="lblExpRole">المسمى الوظيفي</label><input type="text" id="expRole" oninput="updateCV()"></div>
-            <div class="form-row">
-                <div class="form-group"><label id="lblStartDate">تاريخ البدء</label><input type="text" id="expStartDate" placeholder="MM/YYYY" oninput="updateCV()"></div>
-                <div class="form-group"><label id="lblEndDate">تاريخ الانتهاء</label><input type="text" id="expEndDate" placeholder="MM/YYYY" oninput="updateCV()"></div>
+            <!-- قسم الخبرات مع دعم الإضافة الديناميكية -->
+            <div class="section-header-repeat">
+                <h2 id="lblExpTitle">الخبرة العملية</h2>
+                <button type="button" class="add-more-btn" onclick="addExperienceGroup()" id="btnAddExp">+ إضافة خبرة أخرى</button>
             </div>
-            <div class="form-group checkbox-group">
-                <input type="checkbox" id="expPresent" onchange="togglePresentWork(this)">
-                <label for="expPresent" id="lblPresent">ما زلت أعمل هنا</label>
-            </div>
-            <div class="form-group"><label id="lblExpDesc">المهام والإنجازات (ضع • أو - للأنشطة)</label><textarea id="expDesc" rows="4" oninput="updateCV()"></textarea></div>
+            <div id="experienceContainer"></div>
 
-            <h2 id="lblEduTitle">التعليم والتأهيل</h2>
-            <div class="form-group"><label id="lblSchool">المكان / الجامعة / المؤسسة</label><input type="text" id="eduSchool" oninput="updateCV()"></div>
-            <div class="form-group"><label id="lblDegree">الشهادة والتخصص</label><input type="text" id="eduDegree" oninput="updateCV()"></div>
-            <div class="form-group"><label id="lblGradDate">تاريخ الحصول على الشهادة / التخرج</label><input type="text" id="eduGradDate" placeholder="YYYY" oninput="updateCV()"></div>
+            <!-- قسم التعليم مع دعم الإضافة الديناميكية -->
+            <div class="section-header-repeat">
+                <h2 id="lblEduTitle">التعليم والتأهيل</h2>
+                <button type="button" class="add-more-btn" onclick="addEducationGroup()" id="btnAddEdu">+ إضافة مؤهل آخر</button>
+            </div>
+            <div id="educationContainer"></div>
 
             <h2 id="lblCompTitle">الكفاءات الأساسية</h2>
             <div class="form-group"><textarea id="competencies" rows="3" placeholder="مثال: إدارة المشاريع، التفكير الاستراتيجي..." oninput="updateCV()"></textarea></div>
@@ -94,21 +89,12 @@
 
                         <section class="ats-section" id="secExp">
                             <h2 id="headExp">الخبرات العملية</h2>
-                            <div class="ats-item-header">
-                                <span id="cvExpRole" class="bold-text"></span>
-                                <span id="cvExpDates" class="date-text"></span>
-                            </div>
-                            <div id="cvExpCompany" class="subbold-text"></div>
-                            <div id="cvExpDesc" class="ats-formatted-text"></div>
+                            <div id="cvExperienceList"></div>
                         </section>
 
                         <section class="ats-section" id="secEdu">
                             <h2 id="headEdu">التعليم</h2>
-                            <div class="ats-item-header">
-                                <span id="cvEduDegree" class="bold-text"></span>
-                                <span id="cvEduDate" class="date-text"></span>
-                            </div>
-                            <div id="cvEduSchool" class="subbold-text"></div>
+                            <div id="cvEducationList"></div>
                         </section>
 
                         <section class="ats-section" id="secComp">
