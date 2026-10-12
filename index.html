@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة صانع السير الذاتية</title>
+    <!-- خطوط جوجل العربية -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <h1>صانع السير الذاتية الاحترافية</h1>
+        <p>صمم سيرتك الذاتية وحملها كملف PDF بكل سهولة</p>
+    </header>
+
+    <div class="container">
+        <!-- قسم نموذج الإدخال -->
+        <section class="form-section">
+            <h2>بيانات السيرة الذاتية</h2>
+            
+            <div class="form-group">
+                <label for="fullName">الاسم الكامل</label>
+                <input type="text" id="fullName" placeholder="مثال: أحمد محمد" oninput="updateCV()">
+            </div>
+
+            <div class="form-group">
+                <label for="jobTitle">المسمى الوظيفي المستهدف</label>
+                <input type="text" id="jobTitle" placeholder="مثال: مطور وواجهات أمامية" oninput="updateCV()">
+            </div>
+
+            <div class="form-group">
+                <label for="email">البريد الإلكتروني</label>
+                <input type="email" id="email" placeholder="name@example.com" oninput="updateCV()">
+            </div>
+
+            <div class="form-group">
+                <label for="phone">رقم الهاتف</label>
+                <input type="text" id="phone" placeholder="+966 50 000 0000" oninput="updateCV()">
+            </div>
+
+            <div class="form-group">
+                <label for="summary">الملخص المهني</label>
+                <textarea id="summary" rows="4" placeholder="اكتب نبذة مختصرة عن خبراتك..." oninput="updateCV()"></textarea>
+            </div>
+        </section>
+
+        <!-- قسم المعاينة الحية -->
+        <section class="preview-section">
+            <div class="actions-bar">
+                <button id="downloadBtn" onclick="window.print()">تحميل PDF</button>
+            </div>
+            
+            <div class="cv-page" id="cvPreview">
+                <header class="cv-header">
+                    <h2 id="cvName">الاسم الكامل</h2>
+                    <p id="cvJobTitle" class="cv-subtitle">المسمى الوظيفي</p>
+                    <div class="cv-contact">
+                        <span id="cvEmail">email@example.com</span> | 
+                        <span id="cvPhone">+966 50 000 0000</span>
+                    </div>
+                </header>
+                
+                <hr>
+
+                <div class="cv-body">
+                    <h3>الملخص المهني</h3>
+                    <p id="cvSummary">اكتب نبذة مختصرة عن خبراتك هنا لتظهر معاينة مباشرة...</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
