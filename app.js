@@ -35,6 +35,15 @@ const translations = {
     }
 };
 
+const exportMessages = {
+    en: { pdfGenerating:'Creating PDF…', docxGenerating:'Creating Word file…', exportError:'Could not create the file. Check your internet connection and try again.' },
+    ar: { pdfGenerating:'جارٍ إنشاء PDF…', docxGenerating:'جارٍ إنشاء ملف Word…', exportError:'تعذّر إنشاء الملف. تأكد من اتصال الإنترنت ثم حاول مجددًا.' },
+    fr: { pdfGenerating:'Création du PDF…', docxGenerating:'Création du document Word…', exportError:'Impossible de créer le fichier. Vérifiez votre connexion Internet et réessayez.' },
+    es: { pdfGenerating:'Creando PDF…', docxGenerating:'Creando archivo Word…', exportError:'No se pudo crear el archivo. Comprueba tu conexión a Internet e inténtalo de nuevo.' },
+    de: { pdfGenerating:'PDF wird erstellt…', docxGenerating:'Word-Datei wird erstellt…', exportError:'Die Datei konnte nicht erstellt werden. Prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.' }
+};
+Object.keys(exportMessages).forEach(lang => Object.assign(translations[lang], exportMessages[lang]));
+
 const labelIds = [
     'lblPersonal','lblFullName','lblEmail','lblLinkedin','lblPhone','lblLocation',
     'lblSummaryTitle','lblExpTitle','lblEduTitle','lblCompTitle','lblSkillsTitle','lblCertsTitle','lblProjectsTitle','lblLangTitle',
@@ -241,96 +250,154 @@ function formatText(text) {
     }).join('');
 }
 
-function getExportStyles() {
-    const rtl = currentLang === 'ar';
-    return `
-        @page { size: A4; margin: 16mm; }
-        * { box-sizing: border-box; }
-        body { margin: 0; color: #000; font-family: Arial, 'Cairo', sans-serif; direction: ${rtl ? 'rtl' : 'ltr'}; }
-        #cvPreview { width: 100%; color: #000; direction: ${rtl ? 'rtl' : 'ltr'}; text-align: ${rtl ? 'right' : 'left'}; }
-        .ats-header { margin-bottom: 18px; }
-        .ats-header h1 { font-size: 22pt; margin: 0 0 4px; }
-        .ats-contact > div { font-size: 9pt; margin: 2px 0; }
-        .ats-single-column { display: block; }
-        .ats-section { display: block; margin: 0 0 14px; }
-        .ats-section h2 { font-size: 10.5pt; border-bottom: 1px solid #000; padding-bottom: 2px; margin: 0 0 6px; break-after: avoid; page-break-after: avoid; }
-        .ats-section p, .ats-formatted-text, .ats-section ul { font-size: 9.5pt; line-height: 1.4; margin: 0; }
-        .cv-entry { display: block; margin: 0 0 10px; break-inside: avoid; page-break-inside: avoid; }
-        .bold-text { display: block; font-size: 10pt; font-weight: bold; margin-bottom: 2px; }
-        .date-text, .subbold-text { display: block; font-size: 9pt; margin: 2px 0; }
-        ul { padding-inline-start: 20px; }
-        .text-bullet { margin-inline-start: 14px; }
-    `;
+function exportBaseName() {
+    return ({ en:'Resume', ar:'السيرة-الذاتية', fr:'CV', es:'Curriculum', de:'Lebenslauf' })[currentLang] || 'Resume';
 }
 
-function exportToPDF() {
-    updateCV();
-    const printWindow = window.open('', '_blank');
-    if (!printWindow) {
-        window.print();
-        return;
-    }
-    const t = translations[currentLang];
-    const isArabic = currentLang === 'ar';
-    const content = document.getElementById('cvPreview').outerHTML;
-    printWindow.document.open();
-    printWindow.document.write(`<!DOCTYPE html><html lang="${currentLang}" dir="${isArabic ? 'rtl' : 'ltr'}"><head><meta charset="UTF-8"><title>${t.resumeTitle}</title><style>${getExportStyles()}</style></head><body>${content}<script>window.onload=function(){setTimeout(function(){window.focus();window.print();},250)};window.onafterprint=function(){window.close()};<\/script></body></html>`);
-    printWindow.document.close();
-}
-
-function exportToWord() {
-    updateCV();
-    const isArabic = currentLang === 'ar';
-    const t = translations[currentLang];
-    const filename = isArabic ? 'السيرة-الذاتية.doc' : `${t.resumeTitle.replace(/[^a-z0-9 -]/gi, '').replace(/\s+/g, '-') || 'Resume'}.doc`;
-    const align = isArabic ? 'right' : 'left';
-    const cvCopy = document.getElementById('cvPreview').cloneNode(true);
-
-    // Match the A4 preview: fixed page padding, ATS typography, and black rules beneath section titles.
-    cvCopy.setAttribute('style', `display:block;width:100%;min-height:0;margin:0;padding:0;color:#000;font-family:Cairo,Arial,sans-serif;direction:${isArabic ? 'rtl' : 'ltr'};text-align:${align};vertical-align:top;`);
-    cvCopy.querySelectorAll('.ats-section h2').forEach(heading => {
-        heading.setAttribute('style', `display:block;text-align:${align};font-family:Cairo,Arial,sans-serif;font-size:10.5pt;font-weight:bold;text-transform:uppercase;margin:0 0 6pt;padding:0 0 2pt;border-bottom:1px solid #000;mso-border-bottom-alt:solid #000 .75pt;`);
-    });
-    cvCopy.querySelectorAll('.ats-section').forEach(section => {
-        section.style.cssText += 'display:block;margin:0 0 14pt;page-break-inside:auto;';
-    });
-    cvCopy.querySelectorAll('.cv-entry').forEach(entry => {
-        entry.style.cssText += 'display:block;margin:0 0 10pt;page-break-inside:avoid;';
-    });
-
-    const wordStyles = `
-        @page Section1 { size:595.3pt 841.9pt; margin:0; mso-page-orientation:portrait; }
-        div.Section1 { page:Section1; }
-        html, body { margin:0 !important; padding:0 !important; width:100%; height:auto; vertical-align:top; }
-        body { font-family:Cairo,Arial,sans-serif; font-size:9pt; color:#000; direction:${isArabic ? 'rtl' : 'ltr'}; text-align:${align}; mso-pagination:widow-orphan; }
-        table.word-page { width:100%; border-collapse:collapse; table-layout:fixed; margin:0; mso-table-lspace:0pt; mso-table-rspace:0pt; }
-        table.word-page td { padding:51.02pt; vertical-align:top; text-align:${align}; }
-        #cvPreview { display:block; width:100%; min-height:0; margin:0; padding:0; vertical-align:top; }
-        .ats-header { margin:0 0 18px; }
-        .ats-header h1 { margin:0 0 7px; color:#000; font-family:Cairo,Arial,sans-serif; font-size:22pt; font-weight:bold; text-align:${align}; }
-        .ats-contact, .ats-contact div { color:#333; font-family:Cairo,Arial,sans-serif; font-size:9pt; text-align:${align}; }
-        .ats-single-column { display:block; }
-        .ats-section { display:block; margin:0 0 14px; }
-        .ats-section h2 { color:#000; border-bottom:1px solid #000; mso-border-bottom-alt:solid #000 .75pt; }
-        .ats-section p, .ats-formatted-text, .ats-section ul { color:#111; font-size:9pt; line-height:1.5; }
-        .cv-entry { display:block; page-break-inside:avoid; margin:0 0 10px; }
-        .bold-text { display:block; font-size:9.5pt; font-weight:bold; margin-bottom:2px; }
-        .subbold-text { display:block; font-size:9pt; font-weight:bold; margin:2px 0 4px; }
-        .date-text { display:block; font-size:8.5pt; margin:2px 0; }
-        ul { padding-inline-start:18px; }
-        .text-bullet { margin-inline-start:14px; }
-    `;
-    const wrapper = `<div class="Section1"><table class="word-page" width="100%" align="${align}" border="0" cellpadding="0" cellspacing="0"><tr><td valign="top" align="${align}" style="padding:51.02pt;vertical-align:top;">${cvCopy.outerHTML}</td></tr></table></div>`;
-    const html = `<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" lang="${currentLang}" dir="${isArabic ? 'rtl' : 'ltr'}"><head><meta charset="utf-8"><meta name="ProgId" content="Word.Document"><title>${t.resumeTitle}</title><style>${wordStyles}</style></head><body>${wrapper}</body></html>`;
-    const blob = new Blob(['\ufeff', html], { type: 'application/msword;charset=utf-8' });
+function downloadBlob(blob, filename) {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
     link.download = filename;
+    link.rel = 'noopener';
+    link.style.display = 'none';
     document.body.appendChild(link);
     link.click();
     link.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    // Keep the object URL alive long enough for mobile browsers to finish the download.
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+}
+
+async function exportToPDF() {
+    updateCV();
+    const t = translations[currentLang];
+    const button = document.getElementById('downloadPdfBtn');
+    if (typeof window.html2pdf !== 'function') {
+        alert(t.exportError);
+        return;
+    }
+
+    button.disabled = true;
+    button.innerHTML = `<span aria-hidden="true">…</span> ${t.pdfGenerating}`;
+    try {
+        const pdfBlob = await window.html2pdf().set({
+            margin: 0,
+            filename: `${exportBaseName()}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#ffffff',
+                scrollY: 0,
+                windowWidth: Math.max(document.documentElement.clientWidth, Math.ceil(document.getElementById('cvPreview').getBoundingClientRect().width))
+            },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            pagebreak: { mode: ['css', 'legacy'], avoid: ['.ats-section h2', '.cv-entry'] }
+        }).from(document.getElementById('cvPreview')).toPdf().outputPdf('blob');
+        downloadBlob(pdfBlob, `${exportBaseName()}.pdf`);
+    } catch (error) {
+        console.error('PDF export failed:', error);
+        alert(t.exportError);
+    } finally {
+        button.disabled = false;
+        button.innerHTML = `<span aria-hidden="true">↓</span> ${t.pdfBtn}`;
+    }
+}
+
+async function exportToWord() {
+    updateCV();
+    const t = translations[currentLang];
+    const button = document.getElementById('downloadWordBtn');
+    const api = window.docx;
+    if (!api?.Document || !api?.Packer || !api?.Paragraph || !api?.TextRun) {
+        alert(t.exportError);
+        return;
+    }
+
+    button.disabled = true;
+    button.innerHTML = `<span aria-hidden="true">…</span> ${t.docxGenerating}`;
+    try {
+        const isArabic = currentLang === 'ar';
+        const alignment = isArabic ? api.AlignmentType.RIGHT : api.AlignmentType.LEFT;
+        const paragraphs = [];
+        const addParagraph = (text, options = {}) => {
+            const content = String(text || '').trim();
+            if (!content) return;
+            const paragraphOptions = {
+                alignment,
+                bidirectional: isArabic,
+                spacing: { after: options.after ?? 80 },
+                children: [new api.TextRun({ text: content, font: 'Arial', size: options.size || 18, bold: !!options.bold, color: options.color || '111111' })]
+            };
+            if (options.rule) {
+                paragraphOptions.border = {
+                    bottom: { color: '000000', space: 1, style: api.BorderStyle.SINGLE, size: 6 }
+                };
+            }
+            paragraphs.push(new api.Paragraph(paragraphOptions));
+        };
+
+        function addPreviewNode(node) {
+            if (!node || node.nodeType !== 1) return;
+            if (node.tagName === 'UL' || node.tagName === 'OL' || node.classList.contains('cv-entry') || node.classList.contains('ats-formatted-text')) {
+                [...node.children].forEach(addPreviewNode);
+                return;
+            }
+            if (node.tagName === 'LI') {
+                const text = (node.innerText || node.textContent || '').trim();
+                addParagraph(`• ${text.replace(/^[•-]\s*/, '')}`, { size: 18 });
+                return;
+            }
+            if (node.children.length) {
+                [...node.children].forEach(addPreviewNode);
+                return;
+            }
+            let text = (node.innerText || node.textContent || '').trim();
+            if (!text) return;
+            const bullet = node.classList.contains('text-bullet') || /^[•-]\s*/.test(text);
+            if (bullet) text = `• ${text.replace(/^[•-]\s*/, '')}`;
+            addParagraph(text, {
+                bold: node.classList.contains('bold-text'),
+                size: node.classList.contains('bold-text') ? 19 : node.classList.contains('date-text') ? 17 : 18,
+                color: node.classList.contains('date-text') ? '444444' : '111111'
+            });
+        }
+
+        const cv = document.getElementById('cvPreview');
+        const name = cv.querySelector('#cvName').innerText.trim();
+        if (name) addParagraph(name, { bold: true, size: 44, after: 180 });
+        const contactDetails = [...cv.querySelector('#cvContactBar').children]
+            .map(item => (item.innerText || item.textContent || '').trim())
+            .filter(Boolean);
+        if (contactDetails.length) addParagraph(contactDetails.join('  •  '), { size: 18, color: '444444', after: 180 });
+
+        [...cv.querySelectorAll('.ats-section')].forEach(section => {
+            if (section.style.display === 'none') return;
+            const heading = section.querySelector('h2');
+            if (heading) addParagraph(heading.innerText.trim().toLocaleUpperCase(currentLang), { bold: true, size: 21, after: 110, rule: true });
+            [...section.children].filter(child => child !== heading).forEach(addPreviewNode);
+        });
+
+        const doc = new api.Document({
+            sections: [{
+                properties: {
+                    page: {
+                        size: { width: 11906, height: 16838 },
+                        margin: { top: 1020, bottom: 1020, left: 1020, right: 1020 }
+                    }
+                },
+                children: paragraphs
+            }]
+        });
+        const blob = await api.Packer.toBlob(doc);
+        downloadBlob(blob, `${exportBaseName()}.docx`);
+    } catch (error) {
+        console.error('Word export failed:', error);
+        alert(t.exportError);
+    } finally {
+        button.disabled = false;
+        button.innerHTML = `<span aria-hidden="true">▤</span> ${t.wordBtn}`;
+    }
 }
 
 document.addEventListener('input', event => {
