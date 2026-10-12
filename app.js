@@ -268,18 +268,59 @@ function downloadBlob(blob, filename) {
     setTimeout(() => URL.revokeObjectURL(url), 60000);
 }
 
+const exportLibraryPromises = Object.create(null);
+function loadExportLibrary(name, sources, isReady) {
+    if (isReady()) return Promise.resolve();
+    if (exportLibraryPromises[name]) return exportLibraryPromises[name];
+
+    const trySource = index => new Promise((resolve, reject) => {
+        if (isReady()) return resolve();
+        if (index >= sources.length) return reject(new Error(`Could not load ${name}`));
+
+        const script = document.createElement('script');
+        script.src = sources[index];
+        script.async = true;
+        script.crossOrigin = 'anonymous';
+        const timeout = setTimeout(() => {
+            script.onload = null;
+            script.onerror = null;
+            script.remove();
+            trySource(index + 1).then(resolve, reject);
+        }, 20000);
+        script.onload = () => {
+            clearTimeout(timeout);
+            if (isReady()) resolve();
+            else {
+                script.remove();
+                trySource(index + 1).then(resolve, reject);
+            }
+        };
+        script.onerror = () => {
+            clearTimeout(timeout);
+            script.remove();
+            trySource(index + 1).then(resolve, reject);
+        };
+        document.head.appendChild(script);
+    });
+
+    exportLibraryPromises[name] = trySource(0).catch(error => {
+        delete exportLibraryPromises[name];
+        throw error;
+    });
+    return exportLibraryPromises[name];
+}
+
 async function exportToPDF() {
     updateCV();
     const t = translations[currentLang];
     const button = document.getElementById('downloadPdfBtn');
-    if (typeof window.html2pdf !== 'function') {
-        alert(t.exportError);
-        return;
-    }
-
     button.disabled = true;
     button.innerHTML = `<span aria-hidden="true">…</span> ${t.pdfGenerating}`;
     try {
+        await loadExportLibrary('html2pdf', [
+            'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js',
+            'https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js'
+        ], () => typeof window.html2pdf === 'function');
         const pdfBlob = await window.html2pdf().set({
             margin: 0,
             filename: `${exportBaseName()}.pdf`,
@@ -308,15 +349,14 @@ async function exportToWord() {
     updateCV();
     const t = translations[currentLang];
     const button = document.getElementById('downloadWordBtn');
-    const api = window.docx;
-    if (!api?.Document || !api?.Packer || !api?.Paragraph || !api?.TextRun) {
-        alert(t.exportError);
-        return;
-    }
-
     button.disabled = true;
     button.innerHTML = `<span aria-hidden="true">…</span> ${t.docxGenerating}`;
     try {
+        await loadExportLibrary('docx', [
+            'https://unpkg.com/docx@9.5.1/dist/index.umd.cjs',
+            'https://cdn.jsdelivr.net/npm/docx@9.5.1/dist/index.umd.cjs'
+        ], () => !!window.docx?.Packer?.toBlob);
+        const api = window.docx;
         const isArabic = currentLang === 'ar';
         const alignment = isArabic ? api.AlignmentType.RIGHT : api.AlignmentType.LEFT;
         const paragraphs = [];
@@ -369,7 +409,7 @@ async function exportToWord() {
         const contactDetails = [...cv.querySelector('#cvContactBar').children]
             .map(item => (item.innerText || item.textContent || '').trim())
             .filter(Boolean);
-        if (contactDetails.length) addParagraph(contactDetails.join('  •  '), { size: 18, color: '444444', after: 180 });
+        if (contactDetails.length) addParagraph(contactDetails.join('  -  '), { size: 18, color: '444444', after: 180 });
 
         [...cv.querySelectorAll('.ats-section')].forEach(section => {
             if (section.style.display === 'none') return;
