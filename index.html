@@ -3,130 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>صانع السيرة الذاتية الاحترافية - ATS Format</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#101a33">
+    <title>صانع السيرة الذاتية الاحترافية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <header class="main-header">
-        <div class="header-title">
-            <h1>صانع السير الذاتية المهني (ATS)</h1>
-        </div>
-        <div class="lang-selector">
-            <button onclick="setLanguage('ar')" id="btnAr" class="lang-btn active-lang">العربية</button>
-            <button onclick="setLanguage('en')" id="btnEn" class="lang-btn">English</button>
+        <a class="brand" href="#top" aria-label="صانع السيرة الذاتية">
+            <span class="brand-mark" aria-hidden="true">CV</span>
+            <span class="brand-copy">
+                <strong id="appTitle">صانع السيرة الذاتية</strong>
+                <small id="brandSubtitle">مساحتك لبناء سيرة مهنية مميزة</small>
+            </span>
+        </a>
+        <div class="header-tools">
+            <span class="header-badge"><span class="status-dot"></span><span id="headerBadge">متوافق مع أنظمة ATS</span></span>
+            <div class="lang-selector" aria-label="اختيار اللغة">
+                <button onclick="setLanguage('ar')" id="btnAr" class="lang-btn active-lang">العربية</button>
+                <button onclick="setLanguage('en')" id="btnEn" class="lang-btn">English</button>
+            </div>
         </div>
     </header>
 
-    <div class="container">
-        <!-- قسم إدخال البيانات -->
-        <section class="form-section">
-            <h2 id="lblPersonal">البيانات الشخصية</h2>
-            <div class="form-group"><label id="lblFullName">الاسم الكامل</label><input type="text" id="fullName" oninput="updateCV()"></div>
-            <div class="form-group"><label id="lblEmail">البريد الإلكتروني</label><input type="email" id="email" oninput="updateCV()"></div>
-            <div class="form-group"><label id="lblLinkedin">رابط LinkedIn</label><input type="text" id="linkedin" oninput="updateCV()"></div>
-            <div class="form-group"><label id="lblPhone">الهاتف</label><input type="text" id="phone" oninput="updateCV()"></div>
-            <div class="form-group"><label id="lblLocation">المدينة والبلد</label><input type="text" id="location" oninput="updateCV()"></div>
-
-            <h2 id="lblSummaryTitle">الملخص المهني</h2>
-            <div class="form-group"><textarea id="summary" rows="3" oninput="updateCV()"></textarea></div>
-
-            <!-- قسم الخبرات مع دعم الإضافة الديناميكية -->
-            <div class="section-header-repeat">
-                <h2 id="lblExpTitle">الخبرة العملية</h2>
-                <button type="button" class="add-more-btn" onclick="addExperienceGroup()" id="btnAddExp">+ إضافة خبرة أخرى</button>
+    <main id="top">
+        <section class="page-intro">
+            <div class="intro-copy">
+                <span class="intro-kicker" id="introKicker">خطوتك الأولى نحو فرصة جديدة</span>
+                <h1 id="introTitle">سيرتك المهنية، <span>بأفضل صورة.</span></h1>
+                <p id="introDescription">أدخل معلوماتك وشاهد سيرتك الذاتية تتكوّن مباشرة. تصميم أنيق، واضح، وجاهز للتنزيل والمشاركة.</p>
             </div>
-            <div id="experienceContainer"></div>
-
-            <!-- قسم التعليم مع دعم الإضافة الديناميكية -->
-            <div class="section-header-repeat">
-                <h2 id="lblEduTitle">التعليم والتأهيل</h2>
-                <button type="button" class="add-more-btn" onclick="addEducationGroup()" id="btnAddEdu">+ إضافة مؤهل آخر</button>
+            <div class="intro-note">
+                <span class="note-icon" aria-hidden="true">✓</span>
+                <div><strong id="introNoteTitle">بسيطة ومنظمة</strong><small id="introNoteText">املأ الأقسام التي تناسبك فقط</small></div>
             </div>
-            <div id="educationContainer"></div>
-
-            <h2 id="lblCompTitle">الكفاءات الأساسية</h2>
-            <div class="form-group"><textarea id="competencies" rows="3" placeholder="مثال: إدارة المشاريع، التفكير الاستراتيجي..." oninput="updateCV()"></textarea></div>
-
-            <h2 id="lblSkillsTitle">المهارات التقنية والشخصية</h2>
-            <div class="form-group"><textarea id="skills" rows="3" placeholder="سطر لكل مهارة..." oninput="updateCV()"></textarea></div>
-
-            <h2 id="lblCertsTitle">الشهادات المهنية والدورات</h2>
-            <div class="form-group"><textarea id="certifications" rows="3" oninput="updateCV()"></textarea></div>
-
-            <h2 id="lblProjectsTitle">المشاريع / الإنجازات</h2>
-            <div class="form-group"><textarea id="projects" rows="3" oninput="updateCV()"></textarea></div>
-
-            <h2 id="lblLangTitle">اللغات</h2>
-            <div class="form-group"><textarea id="languages" rows="2" placeholder="العربية (اللغة الأم)، الإنجليزية (متقدم)..." oninput="updateCV()"></textarea></div>
         </section>
 
-        <!-- قسم المعاينة والتصدير -->
-        <section class="preview-section">
-            <div class="actions-bar">
-                <button id="downloadPdfBtn" class="action-btn pdf-btn" onclick="window.print()">
-                    📥 تحميل PDF
-                </button>
-                <button id="downloadWordBtn" class="action-btn word-btn" onclick="exportToWord()">
-                    📝 تحميل Word
-                </button>
-            </div>
-            
-            <div class="cv-card-wrapper">
-                <div class="cv-page ats-template" id="cvPreview">
-                    <header class="ats-header">
-                        <h1 id="cvName"></h1>
-                        <div id="cvJobTitle" class="ats-subtitle"></div>
-                        <div class="ats-contact" id="cvContactBar"></div>
-                    </header>
-
-                    <main class="ats-single-column">
-                        <section class="ats-section" id="secSummary">
-                            <h2 id="headSummary">الملخص المهني</h2>
-                            <p id="cvSummary"></p>
-                        </section>
-
-                        <section class="ats-section" id="secExp">
-                            <h2 id="headExp">الخبرات العملية</h2>
-                            <div id="cvExperienceList"></div>
-                        </section>
-
-                        <section class="ats-section" id="secEdu">
-                            <h2 id="headEdu">التعليم</h2>
-                            <div id="cvEducationList"></div>
-                        </section>
-
-                        <section class="ats-section" id="secComp">
-                            <h2 id="headComp">الكفاءات الأساسية</h2>
-                            <div id="cvCompetencies" class="ats-formatted-text"></div>
-                        </section>
-
-                        <section class="ats-section" id="secSkills">
-                            <h2 id="headSkills">المهارات</h2>
-                            <ul id="cvSkills"></ul>
-                        </section>
-
-                        <section class="ats-section" id="secCerts">
-                            <h2 id="headCerts">الشهادات والدورات</h2>
-                            <div id="cvCertifications" class="ats-formatted-text"></div>
-                        </section>
-
-                        <section class="ats-section" id="secProjects">
-                            <h2 id="headProjects">المشاريع والإنجازات</h2>
-                            <div id="cvProjects" class="ats-formatted-text"></div>
-                        </section>
-
-                        <section class="ats-section" id="secLang">
-                            <h2 id="headLang">اللغات</h2>
-                            <div id="cvLanguages" class="ats-formatted-text"></div>
-                        </section>
-                    </main>
+        <div class="container">
+            <section class="form-section" aria-label="نموذج معلومات السيرة الذاتية">
+                <div class="panel-heading">
+                    <span class="panel-step">01</span>
+                    <div><h2 id="formPanelTitle">معلوماتك المهنية</h2><p id="formPanelHint">تظهر التغييرات في المعاينة مباشرة</p></div>
                 </div>
-            </div>
-        </section>
-    </div>
 
+                <h2 class="form-section-title" id="lblPersonal">البيانات الشخصية</h2>
+                <div class="form-group"><label id="lblFullName" for="fullName">الاسم الكامل</label><input type="text" id="fullName" autocomplete="name" placeholder="مثال: أحمد محمد"></div>
+                <div class="form-group"><label id="lblEmail" for="email">البريد الإلكتروني</label><input type="email" id="email" autocomplete="email" placeholder="name@example.com"></div>
+                <div class="form-group"><label id="lblLinkedin" for="linkedin">رابط LinkedIn</label><input type="url" id="linkedin" placeholder="linkedin.com/in/username"></div>
+                <div class="form-row">
+                    <div class="form-group"><label id="lblPhone" for="phone">الهاتف</label><input type="tel" id="phone" autocomplete="tel" placeholder="+966 5X XXX XXXX"></div>
+                    <div class="form-group"><label id="lblLocation" for="location">المدينة والبلد</label><input type="text" id="location" autocomplete="address-level2" placeholder="الرياض، السعودية"></div>
+                </div>
+
+                <h2 class="form-section-title" id="lblSummaryTitle">الملخص المهني</h2>
+                <div class="form-group"><textarea id="summary" rows="4" placeholder="اكتب نبذة موجزة عن خبرتك وأبرز نقاط قوتك..."></textarea></div>
+
+                <h2 class="form-section-title" id="lblExpTitle">الخبرة العملية</h2>
+                <div id="experienceForms"></div>
+                <button type="button" id="addExperienceBtn" class="add-btn" onclick="addExperience()"><span aria-hidden="true">＋</span> إضافة خبرة أخرى</button>
+
+                <h2 class="form-section-title" id="lblEduTitle">التعليم والتأهيل</h2>
+                <div id="educationForms"></div>
+                <button type="button" id="addEducationBtn" class="add-btn" onclick="addEducation()"><span aria-hidden="true">＋</span> إضافة مؤهل تعليمي</button>
+
+                <h2 class="form-section-title" id="lblCompTitle">الكفاءات الأساسية</h2>
+                <div class="form-group"><textarea id="competencies" rows="3" placeholder="مثال: إدارة المشاريع، التفكير الاستراتيجي..."></textarea></div>
+
+                <h2 class="form-section-title" id="lblSkillsTitle">المهارات التقنية والشخصية</h2>
+                <div class="form-group"><textarea id="skills" rows="3" placeholder="اكتب كل مهارة في سطر..."></textarea></div>
+
+                <h2 class="form-section-title" id="lblCertsTitle">الشهادات المهنية والدورات</h2>
+                <div class="form-group"><textarea id="certifications" rows="3" placeholder="أضف الشهادات أو الدورات التي حصلت عليها..."></textarea></div>
+
+                <h2 class="form-section-title" id="lblProjectsTitle">المشاريع / الإنجازات</h2>
+                <div class="form-group"><textarea id="projects" rows="3" placeholder="اذكر مشروعاً أو إنجازاً تفتخر به..."></textarea></div>
+
+                <h2 class="form-section-title" id="lblLangTitle">اللغات</h2>
+                <div class="form-group"><textarea id="languages" rows="2" placeholder="العربية (اللغة الأم)، الإنجليزية (متقدم)..."></textarea></div>
+            </section>
+
+            <section class="preview-section" aria-label="معاينة السيرة الذاتية">
+                <div class="preview-topline"><div><span class="preview-eyebrow" id="previewEyebrow">معاينة مباشرة</span><h2 id="previewTitle">سيرتك الذاتية</h2></div>
+                    <span class="live-indicator"><span class="status-dot"></span><span id="liveLabel">تتحدث تلقائياً</span></span>
+                </div>
+                <div class="actions-bar">
+                    <button id="downloadPdfBtn" class="action-btn pdf-btn" type="button" onclick="exportToPDF()"><span aria-hidden="true">↓</span> تحميل PDF</button>
+                    <button id="downloadWordBtn" class="action-btn word-btn" type="button" onclick="exportToWord()"><span aria-hidden="true">▤</span> تحميل Word</button>
+                </div>
+                <div class="cv-card-wrapper">
+                    <div class="cv-page ats-template" id="cvPreview">
+                        <header class="ats-header">
+                            <h1 id="cvName"></h1>
+                            <div class="ats-contact" id="cvContactBar"></div>
+                        </header>
+                        <main class="ats-single-column">
+                            <section class="ats-section" id="secSummary"><h2 id="headSummary">الملخص المهني</h2><p id="cvSummary"></p></section>
+                            <section class="ats-section" id="secExp"><h2 id="headExp">الخبرات العملية</h2><div id="cvExperiences"></div></section>
+                            <section class="ats-section" id="secEdu"><h2 id="headEdu">التعليم</h2><div id="cvEducations"></div></section>
+                            <section class="ats-section" id="secComp"><h2 id="headComp">الكفاءات الأساسية</h2><div id="cvCompetencies" class="ats-formatted-text"></div></section>
+                            <section class="ats-section" id="secSkills"><h2 id="headSkills">المهارات</h2><ul id="cvSkills"></ul></section>
+                            <section class="ats-section" id="secCerts"><h2 id="headCerts">الشهادات والدورات</h2><div id="cvCertifications" class="ats-formatted-text"></div></section>
+                            <section class="ats-section" id="secProjects"><h2 id="headProjects">المشاريع والإنجازات</h2><div id="cvProjects" class="ats-formatted-text"></div></section>
+                            <section class="ats-section" id="secLang"><h2 id="headLang">اللغات</h2><div id="cvLanguages" class="ats-formatted-text"></div></section>
+                        </main>
+                    </div>
+                </div>
+                <p class="preview-footnote" id="previewFootnote">معاينة نظيفة بتنسيق مناسب لأنظمة تتبع المتقدمين (ATS).</p>
+            </section>
+        </div>
+    </main>
+    <footer class="site-footer"><span id="footerText">صُممت لتساعدك على تقديم أفضل نسخة من مسيرتك المهنية.</span></footer>
     <script src="app.js"></script>
 </body>
 </html>
